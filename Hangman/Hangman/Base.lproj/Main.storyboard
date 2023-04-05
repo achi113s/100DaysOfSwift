@@ -16,23 +16,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HANGMAN" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6I6-tJ-j5o">
-                                <rect key="frame" x="72.666666666666686" y="109" width="248" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="xmG-GO-l48"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="50"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CurrentWord" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="en9-yW-w8D">
-                                <rect key="frame" x="147.33333333333334" y="416" width="98.333333333333343" height="20.333333333333314"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="cYY-Vk-Fmk">
-                                <rect key="frame" x="86" y="536.33333333333337" width="221" height="34.333333333333371"/>
+                                <rect key="frame" x="86" y="526" width="221" height="34.333333333333371"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Guess Here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kkY-Dp-GpC">
                                         <rect key="frame" x="0.0" y="0.0" width="141" height="34.333333333333336"/>
@@ -46,20 +31,25 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fFq-gU-igW">
+                                <rect key="frame" x="96.666666666666686" y="406" width="200" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="kDS-j5-O1f"/>
+                                    <constraint firstAttribute="height" constant="40" id="wEo-sU-V7d"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="cYY-Vk-Fmk" firstAttribute="top" secondItem="en9-yW-w8D" secondAttribute="bottom" constant="100" id="5cI-2o-hZh"/>
+                            <constraint firstItem="cYY-Vk-Fmk" firstAttribute="top" secondItem="fFq-gU-igW" secondAttribute="bottom" constant="80" id="GNA-n7-k8Y"/>
                             <constraint firstItem="cYY-Vk-Fmk" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="IOi-UP-1ya"/>
-                            <constraint firstItem="6I6-tJ-j5o" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="LJs-Rq-McP"/>
-                            <constraint firstItem="en9-yW-w8D" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="T6b-i6-Oya"/>
-                            <constraint firstItem="6I6-tJ-j5o" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="VX0-bo-PjA"/>
-                            <constraint firstItem="en9-yW-w8D" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="n49-lY-0Hy"/>
+                            <constraint firstItem="fFq-gU-igW" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Vv9-hy-cDJ"/>
+                            <constraint firstItem="fFq-gU-igW" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Wop-ut-f9O"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="titleLabel" destination="6I6-tJ-j5o" id="FEW-eW-6KL"/>
+                        <outlet property="lettersStackView" destination="fFq-gU-igW" id="oca-9g-uwr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
