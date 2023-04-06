@@ -11,7 +11,7 @@ class ViewController: UIViewController {
     
     private var promptWordLabel: UILabel!
     private var scoreLabel: UILabel!
-    private var gradientTitle: UIView!
+    private var gradientTitleView: UIView!
     private var inputStackView: UIStackView!
     private var inputTextField: UITextField!
     private var submitButton: UIButton!
@@ -43,11 +43,13 @@ class ViewController: UIViewController {
         gradient.frame = view.bounds
         view.layer.addSublayer(gradient)
         
-        createGradientTitle()
+        gradientTitleView = createGradientLabel(withText: "HANGMAN")
+        view.addSubview(gradientTitleView)
         
         promptWordLabel = UILabel()
         promptWordLabel.translatesAutoresizingMaskIntoConstraints = false
         promptWordLabel.font = UIFont.systemFont(ofSize: 40)
+        promptWordLabel.textColor = .white
         promptWordLabel.text = "_"
         promptWordLabel.textAlignment = .center
         promptWordLabel.numberOfLines = 0
@@ -57,24 +59,28 @@ class ViewController: UIViewController {
         scoreLabel.translatesAutoresizingMaskIntoConstraints = false
         scoreLabel.font = UIFont.systemFont(ofSize: 36)
         scoreLabel.text = "0 Wrong Guesses"
+        scoreLabel.textColor = .white
         scoreLabel.textAlignment = .center
         scoreLabel.numberOfLines = 0
         view.addSubview(scoreLabel)
         
         submitButton = UIButton(type: .system)
+        submitButton.frame = CGRect(x: 0, y: 0, width: 300, height: 100)
         submitButton.translatesAutoresizingMaskIntoConstraints = false
-        submitButton.setTitle("Submit Letter", for: .normal)
-        submitButton.frame = CGRect(x: 0, y: 0, width: 150, height: 80)
+        submitButton.setTitle("SUBMIT LETTER", for: .normal)
+        submitButton.titleLabel?.font = UIFont(name: "PermanentMarker-Regular", size: 35)
+        submitButton.backgroundColor = .black
+        submitButton.tintColor = .orange
         submitButton.addTarget(self, action: #selector(promptForAnswer), for: .touchUpInside)
         view.addSubview(submitButton)
         
         NSLayoutConstraint.activate([
-            gradientTitle.widthAnchor.constraint(equalToConstant: CGFloat(gradientTitleWidth)),
-            gradientTitle.heightAnchor.constraint(equalToConstant: CGFloat(gradientTitleHeight)),
-            gradientTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            gradientTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
+            gradientTitleView.widthAnchor.constraint(equalToConstant: CGFloat(gradientTitleWidth)),
+            gradientTitleView.heightAnchor.constraint(equalToConstant: CGFloat(gradientTitleHeight)),
+            gradientTitleView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            gradientTitleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
             
-            promptWordLabel.topAnchor.constraint(equalTo: gradientTitle.bottomAnchor, constant: 100),
+            promptWordLabel.topAnchor.constraint(equalTo: gradientTitleView.bottomAnchor, constant: 100),
             promptWordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             promptWordLabel.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
             
@@ -157,6 +163,7 @@ class ViewController: UIViewController {
 
         let restartAction = UIAlertAction(title: "Restart", style: .default) { [weak self] action in
             self?.wrongGuesses = 0
+            self?.lettersUsed.removeAll(keepingCapacity: true)
             self?.startLevel()
         }
 
@@ -176,7 +183,7 @@ class ViewController: UIViewController {
         }
     }
     
-    func createGradientTitle() {
+    func createGradientLabel(withText text: String) -> UIView {
         let gradientView = UIView(frame: CGRect(x: 0, y: 0, width: gradientTitleWidth, height: gradientTitleHeight))
         let gradient = CAGradientLayer()
         
@@ -189,7 +196,7 @@ class ViewController: UIViewController {
         gradientView.layer.addSublayer(gradient)
         
         let label = UILabel(frame: gradientView.bounds)
-        label.text = "HANGMAN"
+        label.text = text
         if let customFont = UIFont(name: "PermanentMarker-Regular", size: 50) {
             label.font = customFont
         } else {
@@ -203,9 +210,7 @@ class ViewController: UIViewController {
         
         gradientView.translatesAutoresizingMaskIntoConstraints = false
         
-        self.gradientTitle = gradientView
-        
-        self.view.addSubview(self.gradientTitle)
+        return gradientView
     }
     
 }
