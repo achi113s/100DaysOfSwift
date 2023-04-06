@@ -9,13 +9,29 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    private var currentWordLabel: UILabel!
+    private var promptWordLabel: UILabel!
+    private var scoreLabel: UILabel!
     private var gradientTitle: UIView!
+    private var inputStackView: UIStackView!
+    private var inputTextField: UITextField!
+    private var submitButton: UIButton!
+    
     private let gradientTitleWidth = 300
     private let gradientTitleHeight = 80
     
     private var words: [String] = [String]()
-    private var levelWord: [Character] = [Character]()
+    private var word: String = ""
+    private var promptWord: String = "" {
+        didSet {
+            promptWordLabel.text = promptWord
+        }
+    }
+    private var lettersUsed: [String] = [String]()
+    private var wrongGuesses: Int = 0 {
+        didSet {
+            scoreLabel.text = String("\(wrongGuesses) Wrong Guesses")
+        }
+    }
     
     override func loadView() {
         super.loadView()
@@ -29,13 +45,28 @@ class ViewController: UIViewController {
         
         createGradientTitle()
         
-        currentWordLabel = UILabel()
-        currentWordLabel.translatesAutoresizingMaskIntoConstraints = false
-        currentWordLabel.font = UIFont.systemFont(ofSize: 36)
-        currentWordLabel.text = "_"
-        currentWordLabel.textAlignment = .center
-        currentWordLabel.numberOfLines = 0
-        view.addSubview(currentWordLabel)
+        promptWordLabel = UILabel()
+        promptWordLabel.translatesAutoresizingMaskIntoConstraints = false
+        promptWordLabel.font = UIFont.systemFont(ofSize: 36)
+        promptWordLabel.text = "_"
+        promptWordLabel.textAlignment = .center
+        promptWordLabel.numberOfLines = 0
+        view.addSubview(promptWordLabel)
+        
+        scoreLabel = UILabel()
+        scoreLabel.translatesAutoresizingMaskIntoConstraints = false
+        scoreLabel.font = UIFont.systemFont(ofSize: 40)
+        scoreLabel.text = "0"
+        scoreLabel.textAlignment = .center
+        scoreLabel.numberOfLines = 0
+        view.addSubview(scoreLabel)
+        
+        submitButton = UIButton(type: .system)
+        submitButton.translatesAutoresizingMaskIntoConstraints = false
+        submitButton.setTitle("Submit Letter", for: .normal)
+        submitButton.frame = CGRect(x: 0, y: 0, width: 150, height: 80)
+        submitButton.addTarget(self, action: #selector(promptForAnswer), for: .touchUpInside)
+        view.addSubview(submitButton)
         
         NSLayoutConstraint.activate([
             gradientTitle.widthAnchor.constraint(equalToConstant: CGFloat(gradientTitleWidth)),
@@ -43,9 +74,15 @@ class ViewController: UIViewController {
             gradientTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             gradientTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
             
-            currentWordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            currentWordLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            currentWordLabel.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
+            scoreLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scoreLabel.topAnchor.constraint(equalTo: gradientTitle.bottomAnchor, constant: 30),
+            
+            promptWordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            promptWordLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            promptWordLabel.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+            
+            submitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            submitButton.topAnchor.constraint(equalTo: promptWordLabel.bottomAnchor, constant: 50)
         ])
     }
     
@@ -59,7 +96,6 @@ class ViewController: UIViewController {
         if let wordsURL = Bundle.main.url(forResource: "words", withExtension: "txt") {
             if let wordsString = try? String(contentsOf: wordsURL) {
                 words = wordsString.components(separatedBy: "\n")
-                words.shuffle()
             }
         } else {
             words = ["Empty"]
@@ -69,12 +105,47 @@ class ViewController: UIViewController {
     
     func startLevel() {
         DispatchQueue.main.async { [weak self] in
-            var blankString = ""
-            for c in (self?.words.first)! {
-                blankString += "_"
-                self?.levelWord.append(c)
+            self?.words.shuffle()
+            self?.word = self?.words.first ?? "Empty"
+            self?.setPromptWord()
+        }
+    }
+    
+    @objc func promptForAnswer(_ sender: UIButton) {
+        let ac = UIAlertController(title: "Enter answer", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+
+        let submitAction = UIAlertAction(title: "Submit", style: .default) { [weak self, weak ac] action in
+            guard let answer = ac?.textFields?[0].text else { return }
+            if answer.count == 1 {
+                self?.submit(answer)
             }
-            self?.currentWordLabel.text = blankString
+        }
+
+        ac.addAction(submitAction)
+        present(ac, animated: true)
+    }
+    
+    func submit(_ answer: String) {
+        lettersUsed.append(answer.uppercased())
+        
+        if word.contains(answer) {
+            setPromptWord()
+        } else {
+            wrongGuesses += 1
+            print("not in \(word)")
+        }
+    }
+    
+    func setPromptWord() {
+        promptWord = ""
+        for letter in word {
+            let strLetter = String(letter)
+            if lettersUsed.contains(strLetter) {
+                promptWord += strLetter
+            } else {
+                promptWord += "?"
+            }
         }
     }
     
