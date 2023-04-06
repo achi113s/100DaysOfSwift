@@ -9,26 +9,48 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    private var words: [String] = [String]()
-    private var currentWord: String = ""
-    private var currentWordIndex: Int = 0
-    
-    private var gradientTitle = UIView()
+    private var currentWordLabel: UILabel!
+    private var gradientTitle: UIView!
     private let gradientTitleWidth = 300
     private let gradientTitleHeight = 80
     
-    @IBOutlet weak var lettersStackView: UIStackView!
+    private var words: [String] = [String]()
+    private var levelWord: [Character] = [Character]()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
+        
+        let gradient = CAGradientLayer()
+        gradient.colors = [UIColor.black.cgColor, UIColor.white.cgColor]
+        gradient.startPoint = CGPoint(x: 0.5, y: 0.0)
+        gradient.endPoint = CGPoint(x: 0.5, y: 1.0)
+        gradient.frame = view.bounds
+        view.layer.addSublayer(gradient)
         
         createGradientTitle()
+        
+        currentWordLabel = UILabel()
+        currentWordLabel.translatesAutoresizingMaskIntoConstraints = false
+        currentWordLabel.font = UIFont.systemFont(ofSize: 36)
+        currentWordLabel.text = "_"
+        currentWordLabel.textAlignment = .center
+        currentWordLabel.numberOfLines = 0
+        view.addSubview(currentWordLabel)
+        
         NSLayoutConstraint.activate([
             gradientTitle.widthAnchor.constraint(equalToConstant: CGFloat(gradientTitleWidth)),
             gradientTitle.heightAnchor.constraint(equalToConstant: CGFloat(gradientTitleHeight)),
             gradientTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            gradientTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50)
+            gradientTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
+            
+            currentWordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            currentWordLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            currentWordLabel.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
         ])
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         performSelector(inBackground: #selector(loadWords), with: nil)
     }
@@ -42,27 +64,18 @@ class ViewController: UIViewController {
         } else {
             words = ["Empty"]
         }
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.startGame()
-        }
+        startLevel()
     }
     
-    func startGame() {
-        currentWord = words[0]
-        
-        for _ in 0..<currentWord.count {
-            let letter = UILabel()
-            letter.text = "_"
-            letter.font = UIFont.systemFont(ofSize: 20)
-            letter.translatesAutoresizingMaskIntoConstraints = false
-            letter.textColor = .black
-            lettersStackView.addSubview(letter)
-            print(letter.text)
+    func startLevel() {
+        DispatchQueue.main.async { [weak self] in
+            var blankString = ""
+            for c in (self?.words.first)! {
+                blankString += "_"
+                self?.levelWord.append(c)
+            }
+            self?.currentWordLabel.text = blankString
         }
-        lettersStackView.layer.borderColor = UIColor.black.cgColor
-        lettersStackView.layer.borderWidth = 3
-        self.view.addSubview(lettersStackView)
     }
     
     func createGradientTitle() {

@@ -15,42 +15,9 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="cYY-Vk-Fmk">
-                                <rect key="frame" x="86" y="526" width="221" height="34.333333333333371"/>
-                                <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Guess Here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kkY-Dp-GpC">
-                                        <rect key="frame" x="0.0" y="0.0" width="141" height="34.333333333333336"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="we6-ho-o2H">
-                                        <rect key="frame" x="149" y="0.0" width="72" height="34.333333333333336"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Guess"/>
-                                    </button>
-                                </subviews>
-                            </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="fFq-gU-igW">
-                                <rect key="frame" x="96.666666666666686" y="406" width="200" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="kDS-j5-O1f"/>
-                                    <constraint firstAttribute="height" constant="40" id="wEo-sU-V7d"/>
-                                </constraints>
-                            </stackView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="cYY-Vk-Fmk" firstAttribute="top" secondItem="fFq-gU-igW" secondAttribute="bottom" constant="80" id="GNA-n7-k8Y"/>
-                            <constraint firstItem="cYY-Vk-Fmk" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="IOi-UP-1ya"/>
-                            <constraint firstItem="fFq-gU-igW" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Vv9-hy-cDJ"/>
-                            <constraint firstItem="fFq-gU-igW" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Wop-ut-f9O"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="lettersStackView" destination="fFq-gU-igW" id="oca-9g-uwr"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
