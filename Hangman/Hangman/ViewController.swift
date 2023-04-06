@@ -47,7 +47,7 @@ class ViewController: UIViewController {
         
         promptWordLabel = UILabel()
         promptWordLabel.translatesAutoresizingMaskIntoConstraints = false
-        promptWordLabel.font = UIFont.systemFont(ofSize: 36)
+        promptWordLabel.font = UIFont.systemFont(ofSize: 40)
         promptWordLabel.text = "_"
         promptWordLabel.textAlignment = .center
         promptWordLabel.numberOfLines = 0
@@ -55,8 +55,8 @@ class ViewController: UIViewController {
         
         scoreLabel = UILabel()
         scoreLabel.translatesAutoresizingMaskIntoConstraints = false
-        scoreLabel.font = UIFont.systemFont(ofSize: 40)
-        scoreLabel.text = "0"
+        scoreLabel.font = UIFont.systemFont(ofSize: 36)
+        scoreLabel.text = "0 Wrong Guesses"
         scoreLabel.textAlignment = .center
         scoreLabel.numberOfLines = 0
         view.addSubview(scoreLabel)
@@ -74,15 +74,15 @@ class ViewController: UIViewController {
             gradientTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             gradientTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
             
-            scoreLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            scoreLabel.topAnchor.constraint(equalTo: gradientTitle.bottomAnchor, constant: 30),
-            
+            promptWordLabel.topAnchor.constraint(equalTo: gradientTitle.bottomAnchor, constant: 100),
             promptWordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            promptWordLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             promptWordLabel.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
             
+            scoreLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scoreLabel.bottomAnchor.constraint(equalTo: submitButton.topAnchor, constant: -50),
+            
             submitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            submitButton.topAnchor.constraint(equalTo: promptWordLabel.bottomAnchor, constant: 50)
+            submitButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -75)
         ])
     }
     
@@ -117,7 +117,7 @@ class ViewController: UIViewController {
 
         let submitAction = UIAlertAction(title: "Submit", style: .default) { [weak self, weak ac] action in
             guard let answer = ac?.textFields?[0].text else { return }
-            if answer.count == 1 {
+            if answer.trimmingCharacters(in: .whitespacesAndNewlines).count == 1 {
                 self?.submit(answer)
             }
         }
@@ -127,14 +127,41 @@ class ViewController: UIViewController {
     }
     
     func submit(_ answer: String) {
-        lettersUsed.append(answer.uppercased())
+        let upperCaseAnswer = answer.uppercased()
+        lettersUsed.append(upperCaseAnswer)
         
-        if word.contains(answer) {
+        if word.contains(upperCaseAnswer) {
             setPromptWord()
         } else {
             wrongGuesses += 1
-            print("not in \(word)")
+            
+            if wrongGuesses == 7 {
+                showGameOver()
+            } else {
+                showWrongAnswerMessage(for: upperCaseAnswer)
+            }
         }
+    }
+    
+    func showWrongAnswerMessage(for answer: String) {
+        let ac = UIAlertController(title: "Wrong Answer", message: "\"\(answer)\" isn't in the word.", preferredStyle: .alert)
+
+        let cancelAction = UIAlertAction(title: "Submit", style: .cancel)
+
+        ac.addAction(cancelAction)
+        present(ac, animated: true)
+    }
+    
+    func showGameOver() {
+        let ac = UIAlertController(title: "GAME OVER", message: "You lost, idiot!", preferredStyle: .alert)
+
+        let restartAction = UIAlertAction(title: "Restart", style: .default) { [weak self] action in
+            self?.wrongGuesses = 0
+            self?.startLevel()
+        }
+
+        ac.addAction(restartAction)
+        present(ac, animated: true)
     }
     
     func setPromptWord() {
