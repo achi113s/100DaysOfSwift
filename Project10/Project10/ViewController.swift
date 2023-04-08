@@ -10,6 +10,8 @@ import UIKit
 class ViewController: UICollectionViewController,
                         UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    var people = [Person]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -19,14 +21,26 @@ class ViewController: UICollectionViewController,
     //MARK: - CollectionView Data Source Methods
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return people.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Person", for: indexPath) as? PersonCell else {
             fatalError("Unable to dequeue a PersonCell.")
         }
-        cell.nameLabel.text = "Label"
+        
+        let person = people[indexPath.item]
+        
+        cell.nameLabel.text = person.name
+        
+        let path = getDocumentsDirectory().appending(path: person.image)
+        cell.imageView.image = UIImage(contentsOfFile: path.path())
+        
+        cell.imageView.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
+        cell.imageView.layer.borderWidth = 2
+        cell.imageView.layer.cornerRadius = 3
+        cell.layer.cornerRadius = 7
+        
         return cell
     }
     
@@ -42,6 +56,10 @@ class ViewController: UICollectionViewController,
             try? jpegData.write(to: imagePath)
         }
         
+        let person = Person(name: "Unknown", image: imageName)
+        people.append(person)
+        collectionView.reloadData()
+        
         dismiss(animated: true)
     }
     
@@ -55,6 +73,35 @@ class ViewController: UICollectionViewController,
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let person = people[indexPath.item]
+        
+        let renameAction = UIAlertController(title: "Rename Person", message: nil, preferredStyle: .alert)
+        renameAction.addTextField()
+        
+        renameAction.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self, weak renameAction] _ in
+            guard let newName = renameAction?.textFields?[0].text else { return }
+            person.name = newName
+            self?.collectionView.reloadData()
+        }))
+        
+        renameAction.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        let ac = UIAlertController(title: "Edit Person", message: "Do you want to rename or delete the person?", preferredStyle: .alert)
+        
+        ac.addAction(UIAlertAction(title: "Rename", style: .default, handler: { [weak self] _ in
+            self?.dismiss(animated: true)
+            self?.present(renameAction, animated: true)
+        }))
+        
+        ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+            self?.people.remove(at: indexPath.item)
+            self?.collectionView.deleteItems(at: [indexPath])
+        }))
+        
+        present(ac, animated: true)
     }
 
 }
