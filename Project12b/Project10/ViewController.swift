@@ -104,6 +104,7 @@ class ViewController: UICollectionViewController,
         save()
         collectionView.reloadData()
         
+        
         dismiss(animated: true)
     }
     
