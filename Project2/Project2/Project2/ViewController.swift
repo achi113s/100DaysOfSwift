@@ -43,6 +43,10 @@ class ViewController: UIViewController {
     }
     
     @IBAction func buttonTapped(_ sender: UIButton) {
+        UIView.animate(withDuration: 2, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 5) {
+            sender.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            sender.transform = CGAffineTransform.identity
+        }
         
         if questionNumber <= 10 {
             var title: String
@@ -63,8 +67,6 @@ class ViewController: UIViewController {
             questionNumber += 1
             present(ac, animated: true)
         }
-        
-        
     }
     
 }
