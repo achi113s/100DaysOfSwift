@@ -6,5 +6,37 @@
         "population": 333287557,
         "currency": "U.S. Dollar ($)",
         "description": "The United States of America (U.S.A. or USA), commonly known as the United States (U.S. or US) or America, is a country primarily located in North America. It consists of 50 states, a federal district, five major unincorporated territories, nine Minor Outlying Islands, and 326 Indian reservations. The United States is the world's third-largest country by both land and total area. It shares land borders with Canada to its north and with Mexico to its south and has maritime borders with the Bahamas, Cuba, Russia, and other nations. With a population of over 333 million, it is the most populous country in the Americas and the third most populous in the world. The national capital of the United States is Washington, D.C. and its most populous city and principal financial center is New York City."
+    },
+    {
+        "name": "Peru",
+        "capitalCity": "Lima",
+        "size": "496,225 sq mi",
+        "population": 34352719,
+        "currency": "Peruvian sol",
+        "description": "Peru, officially the Republic of Peru (Spanish: República del Perú), is a country in western South America. It is bordered in the north by Ecuador and Colombia, in the east by Brazil, in the southeast by Bolivia, in the south by Chile, and in the south and west by the Pacific Ocean. Peru is a megadiverse country with habitats ranging from the arid plains of the Pacific coastal region in the west to the peaks of the Andes mountains extending from the north to the southeast of the country to the tropical Amazon basin rainforest in the east with the Amazon River. Peru has a population of over 34 million, and its capital and largest city is Lima. At 1,285,216 km2 (496,225 sq mi), Peru is the 19th largest country in the world, and the third largest in South America."
+    },
+    {
+        "name": "Italy",
+        "capitalCity": "Rome",
+        "size": "116,310 sq mi",
+        "population": 58853482,
+        "currency": "Euro (€)",
+        "description": "Italy, officially the Italian Republic or the Republic of Italy, is a country in Southern and Western Europe. Located in the middle of the Mediterranean Sea, it consists of a peninsula delimited by the Alps and surrounded by several islands; its territory largely coincides with the homonymous geographical region. Italy shares land borders with France, Switzerland, Austria, Slovenia and the enclaved microstates of Vatican City and San Marino. It has a territorial exclave in Switzerland, Campione, and some islands in the African Plate. Italy covers an area of 301,230 km2 (116,310 sq mi), with a population of about 60 million. It is the third-most populous member state of the European Union, the sixth-most populous country in Europe, and the tenth-largest country in the continent by land area. Italy's capital and largest city is Rome."
+    },
+    {
+        "name": "South Korea",
+        "capitalCity": "Seoul",
+        "size": "38,750 sq mi",
+        "population": 51966948,
+        "currency": "Korean Republic won",
+        "description": "South Korea, officially the Republic of Korea (ROK), is a country in East Asia. It constitutes the southern part of the Korean Peninsula and borders North Korea. The country's western border is formed by the Yellow Sea, while its eastern border is defined by the Sea of Japan. South Korea claims to be the sole legitimate government of the entire peninsula and adjacent islands. It has a population of 51.96 million, of which roughly half live in the Seoul Capital Area, the fourth most populous metropolitan area in the world. Other major cities include Incheon, Busan, and Daegu."
+    },
+    {
+        "name": "Egypt",
+        "capitalCity": "Cairo",
+        "size": "390,121 sq mi",
+        "population": 104635983,
+        "currency": "Egyptian pound",
+        "description": "Egypt, officially the Arab Republic of Egypt, is a transcontinental country spanning the northeast corner of Africa and southwest corner of Asia via a land bridge formed by the Sinai Peninsula. It is bordered by the Mediterranean Sea to the north, the Gaza Strip of Palestine and Israel to the northeast, the Red Sea to the east, Sudan to the south, and Libya to the west. The Gulf of Aqaba in the northeast separates Egypt from Jordan and Saudi Arabia. Cairo is the capital and largest city of Egypt, while Alexandria, the second-largest city, is an important industrial and tourist hub at the Mediterranean coast. At approximately 100 million inhabitants, Egypt is the 14th-most populated country in the world."
     }
 ]
