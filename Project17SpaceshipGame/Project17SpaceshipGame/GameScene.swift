@@ -14,8 +14,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var scoreLabel: SKLabelNode!
     
     var possibleEnemies = ["ball", "hammer", "tv"]
+    var createEnemyTimeInterval = 1.0
+    var enemiesCreated = 0
     var gameTimer: Timer?
     var isGameOver = false
+    
+    var playerTouched = false
     
     var score = 0 {
         didSet {
@@ -47,7 +51,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity = .zero
         physicsWorld.contactDelegate = self
         
-        gameTimer = Timer.scheduledTimer(timeInterval: 0.35, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+        if !isGameOver {
+            gameTimer = Timer.scheduledTimer(timeInterval: createEnemyTimeInterval, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+        } else {
+            gameTimer?.invalidate()
+        }
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -66,13 +74,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         guard let touch = touches.first else { return }
         var location = touch.location(in: self)
         
-        if location.y < 100 {
-            location.y = 100
-        } else if location.y > 668 {
-            location.y = 668
+        for node in nodes(at: location) {
+            if node == player { playerTouched = true }
         }
         
-        player.position = location
+        if playerTouched {
+            if location.y < 100 {
+                location.y = 100
+            } else if location.y > 668 {
+                location.y = 668
+            }
+            
+            player.position = location
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        playerTouched = false
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -85,7 +103,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func createEnemy() {
+        if isGameOver { return }
         guard let enemy = possibleEnemies.randomElement() else { return }
+        
+        if enemiesCreated > 19 {
+            enemiesCreated = 0
+            createEnemyTimeInterval -= createEnemyTimeInterval > 0.1 ? 0.1 : 0.0
+            gameTimer?.invalidate()
+            gameTimer = Timer.scheduledTimer(timeInterval: createEnemyTimeInterval, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+        }
+        
+        enemiesCreated += 1
         
         let sprite = SKSpriteNode(imageNamed: enemy)
         sprite.position = CGPoint(x: 1200, y: Int.random(in: 50...736))
