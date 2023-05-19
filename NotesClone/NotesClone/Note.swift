@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Note: Codable, Identifiable {
+class Note: Codable, Identifiable, Equatable {
     var id = UUID()
     var dateCreated: Date
     var title: String
@@ -18,5 +18,9 @@ struct Note: Codable, Identifiable {
         self.dateCreated = dateCreated
         self.title = title
         self.content = content
+    }
+    
+    static func ==(lhs: Note, rhs: Note) -> Bool {
+        lhs.id == rhs.id
     }
 }
