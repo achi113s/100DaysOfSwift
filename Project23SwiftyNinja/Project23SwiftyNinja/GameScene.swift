@@ -44,6 +44,7 @@ class GameScene: SKScene {
     var nextSequenceQueued = true
     
     var isGameEnded = false
+    var gameOverLabel: SKLabelNode!
     
     override func didMove(to view: SKView) {
         let background = SKSpriteNode(imageNamed: "sliceBackground")
@@ -58,6 +59,7 @@ class GameScene: SKScene {
         createScore()
         createLives()
         createSlices()
+        createGameOverLabel()
         
         sequence = [.oneNoBomb, .oneNoBomb, .twoWithOneBomb, .twoWithOneBomb, .three, .one, .chain]
         
@@ -108,6 +110,18 @@ class GameScene: SKScene {
         addChild(activeSliceFG)
     }
     
+    func createGameOverLabel() {
+        gameOverLabel = SKLabelNode(fontNamed: "Chalkduster")
+        gameOverLabel.text = "GAME OVER"
+        gameOverLabel.horizontalAlignmentMode = .center
+        gameOverLabel.fontSize = 48
+        addChild(gameOverLabel)
+        
+        gameOverLabel.position = CGPoint(x: 512, y: 384)
+        
+        gameOverLabel.isHidden = true
+    }
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard isGameEnded == false else { return }
         
@@ -142,6 +156,31 @@ class GameScene: SKScene {
                 node.run(sequence)
                 
                 score += 1
+                
+                if let index = activeEnemies.firstIndex(of: node) {
+                    activeEnemies.remove(at: index)
+                }
+                
+                run(SKAction.playSoundFileNamed("whack.caf", waitForCompletion: false))
+            } else if node.name == "superEnemy" {
+                // destroy the narwhal
+                if let emitter = SKEmitterNode(fileNamed: "sliceHitEnemy") {
+                    emitter.position = node.position
+                    addChild(emitter)
+                }
+                
+                node.name = ""
+                node.physicsBody?.isDynamic = false
+                
+                let scaleOut = SKAction.scale(to: 0.001, duration: 0.2)
+                let fadeOut = SKAction.fadeOut(withDuration: 0.2)
+                
+                let group = SKAction.group([scaleOut, fadeOut])
+                let sequence = SKAction.sequence([group, .removeFromParent()])
+                
+                node.run(sequence)
+                
+                score += 5
                 
                 if let index = activeEnemies.firstIndex(of: node) {
                     activeEnemies.remove(at: index)
@@ -183,6 +222,7 @@ class GameScene: SKScene {
         guard isGameEnded == false else { return }
         
         isGameEnded = true
+        gameOverLabel.isHidden = false
         physicsWorld.speed = 0
         isUserInteractionEnabled = false
         
@@ -255,7 +295,7 @@ class GameScene: SKScene {
     func createEnemy(forceBomb: ForceBomb = .random) {
         let enemy: SKSpriteNode
         
-        var enemyType = Int.random(in: 0...6)
+        var enemyType = Int.random(in: 0...7)
         
         if forceBomb == .never {
             enemyType = 1
@@ -289,9 +329,15 @@ class GameScene: SKScene {
                 enemy.addChild(emitter)
             }
         } else {
-            enemy = SKSpriteNode(imageNamed: "penguin")
-            run(SKAction.playSoundFileNamed("launch.caf", waitForCompletion: false))
-            enemy.name = "enemy"
+            if enemyType == 7 {
+                enemy = SKSpriteNode(imageNamed: "narwhal")
+                run(SKAction.playSoundFileNamed("launch.caf", waitForCompletion: false))
+                enemy.name = "superEnemy"
+            } else {
+                enemy = SKSpriteNode(imageNamed: "penguin")
+                run(SKAction.playSoundFileNamed("launch.caf", waitForCompletion: false))
+                enemy.name = "enemy"
+            }
         }
         
         let randomPosition = CGPoint(x: Int.random(in: 64...960), y: K.offScreenYPosition)
@@ -349,7 +395,7 @@ class GameScene: SKScene {
                 if node.position.y < -140 {
                     node.removeAllActions()
                     
-                    if node.name == "enemy" {
+                    if node.name == "enemy" || node.name == "superEnemy" {
                         node.name = ""
                         subtractLife()
                         
