@@ -294,26 +294,26 @@ class GameScene: SKScene {
             enemy.name = "enemy"
         }
         
-        let randomPosition = CGPoint(x: Int.random(in: 64...960), y: -128)
+        let randomPosition = CGPoint(x: Int.random(in: 64...960), y: K.offScreenYPosition)
         enemy.position = randomPosition
         
-        let randomAngularVelocity = CGFloat.random(in: -3...3)
+        let randomAngularVelocity = CGFloat.random(in: CGFloat(K.minAngularSpeed)...CGFloat(K.maxAngularSpeed))
         let randomXVelocity: Int
         
         if randomPosition.x < 256 {
-            randomXVelocity = Int.random(in: 8...15)
+            randomXVelocity = Int.random(in: K.minXSpeedFast...K.maxXSpeedFast)
         } else if randomPosition.x < 512 {
-            randomXVelocity = Int.random(in: 3...5)
+            randomXVelocity = Int.random(in: K.minXSpeedSlow...K.maxXSpeedSlow)
         } else if randomPosition.x < 768 {
-            randomXVelocity = -Int.random(in: 3...5)
+            randomXVelocity = -Int.random(in: K.minXSpeedSlow...K.maxXSpeedSlow)
         } else {
-            randomXVelocity = -Int.random(in: 8...15)
+            randomXVelocity = -Int.random(in: K.minXSpeedFast...K.maxXSpeedFast)
         }
         
-        let randomYVelocity = Int.random(in: 24...32)
+        let randomYVelocity = Int.random(in: K.minYSpeed...K.maxYSpeed)
         
         enemy.physicsBody = SKPhysicsBody(circleOfRadius: 64)
-        enemy.physicsBody?.velocity = CGVector(dx: randomXVelocity * 40, dy: randomYVelocity * 40)
+        enemy.physicsBody?.velocity = CGVector(dx: randomXVelocity * K.speedMultiplier, dy: randomYVelocity * K.speedMultiplier)
         enemy.physicsBody?.angularVelocity = randomAngularVelocity
         enemy.physicsBody?.collisionBitMask = 0
         
@@ -392,9 +392,9 @@ class GameScene: SKScene {
     func tossEnemies() {
         guard isGameEnded == false else { return }
         
-        popupTime *= 0.991
-        chainDelay *= 0.99
-        physicsWorld.speed *= 1.02
+        popupTime *= K.popupTimeMultiplier
+        chainDelay *= K.chainDelayMultiplier
+        physicsWorld.speed *= K.physicsWorldSpeedMultiplier
         
         let sequenceType = sequence[sequencePosition]
         
@@ -427,32 +427,32 @@ class GameScene: SKScene {
         case .chain:
             createEnemy()
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 5.0)) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / K.chainDelayMultiplier)) { [weak self] in
                 self?.createEnemy()
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 5.0 * 2)) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / K.chainDelayMultiplier * 2)) { [weak self] in
                 self?.createEnemy()
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 5.0 * 3)) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / K.chainDelayMultiplier * 3)) { [weak self] in
                 self?.createEnemy()
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 5.0 * 4)) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / K.chainDelayMultiplier * 4)) { [weak self] in
                 self?.createEnemy()
             }
         
         case .fastChain:
             createEnemy()
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 10.0)) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / K.fastChainMultiplier)) { [weak self] in
                 self?.createEnemy()
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 10.0 * 2)) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / K.fastChainMultiplier * 2)) { [weak self] in
                 self?.createEnemy()
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 10.0 * 3)) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / K.fastChainMultiplier * 3)) { [weak self] in
                 self?.createEnemy()
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 10.0 * 4)) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / K.fastChainMultiplier * 4)) { [weak self] in
                 self?.createEnemy()
             }
         }
